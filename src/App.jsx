@@ -79,7 +79,7 @@ function App() {
           <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent mb-4">
             🧠 Detección de Objetos En Oficina
           </h1>
-          <p className="text-gray-400 text-lg">Tecnología avanzada de reconocimiento de objetos</p>
+          <p className="text-gray-400 text-lg">....</p>
         </div>
 
         {/* Main Content */}
