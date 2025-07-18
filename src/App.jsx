@@ -1,7 +1,8 @@
 import { useRef, useState } from "react"
 import axios from "axios"
+import {useLocalStorage} from './hooks/useLocalStorage.js'
 
-const API_URL = "https://9c0c1d0e9a2d.ngrok-free.app"
+// const API_URL = "https://9c0c1d0e9a2d.ngrok-free.app"
 
 function App() {
   const webcamRef = useRef(null)
@@ -29,7 +30,7 @@ function App() {
     formData.append("file", imageFile)
     setLoading(true)
     try {
-      const response = await axios.post(`${API_URL}/detectar/`, formData)
+      const response = await axios.post(`${handleGet()}/detectar/`, formData)
       setResult(response.data)
     } catch (err) {
       alert("❌ Error al conectar con la API.")
@@ -50,7 +51,7 @@ function App() {
     const formData = new FormData()
     formData.append("file", videoFile)
     try {
-      const res = await axios.post(`${API_URL}/video_upload/`, formData)
+      const res = await axios.post(`${handleGet()}/video_upload/`, formData)
       setVideoURL(res.data.url)
     } catch (err) {
       alert("❌ Error al subir el video")
@@ -70,6 +71,24 @@ function App() {
     setVideoFile(null)
     setVideoURL(null)
   }
+
+  const { storedValue, setStorage, getStorage } = useLocalStorage('myKey');
+  const [input, setInput] = useState(storedValue);
+
+  const handleChange = (e) => {
+    setInput(e.target.value);
+  };
+
+  const handleSave = () => {
+    setStorage(input);
+  };
+
+  const handleGet = () => {
+    const value = getStorage();
+    // alert('Stored Value: ' + (value || 'Nada guardado'));
+    return value || 'Nada guardado';
+  };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
@@ -124,7 +143,7 @@ function App() {
                   <h3 className="text-lg font-medium mb-4 text-gray-200">📺 Detección en vivo desde cámara</h3>
                   <div className="relative inline-block">
                     <img
-                      src={`${API_URL}/video_feed?source=cam`}
+                      src={`${handleGet()}/video_feed?source=cam`}
                       alt="Stream de cámara"
                       className="w-full max-w-md h-auto rounded-xl border-2 border-gray-600 shadow-2xl"
                     />
@@ -263,6 +282,22 @@ function App() {
           </div>
         </div>
       </div>
+      <div className="p-4">
+      <input
+        type="text"
+        value={input}
+        onChange={handleChange}
+        placeholder="Escribe algo"
+        className="border p-2 mr-2"
+      />
+      <button onClick={handleSave} className="bg-blue-500 text-white px-2 py-1 mr-2">
+        Guardar
+      </button>
+      <button onClick={handleGet} className="bg-green-500 text-white px-2 py-1">
+        Obtener
+      </button>
+      <div className="mt-2 text-gray-700">Valor actual: {storedValue}</div>
+    </div>
     </div>
   );
 }
