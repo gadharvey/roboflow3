@@ -1,7 +1,7 @@
 import { useRef, useState } from "react"
 import axios from "axios"
 
-const API_URL = "https://23d5792f3c42.ngrok-free.app"
+const API_URL = "https://9c0c1d0e9a2d.ngrok-free.app"
 
 function App() {
   const webcamRef = useRef(null)
